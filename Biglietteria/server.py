@@ -2,8 +2,10 @@ import socket
 import threading
 
 '''
-films = ["Avatar", [50, 8.50], "Inception", [30, 7.00], "Interstellar", [40, 7.50], "The Matrix", [25, 6.50]]
+# films => nome, biglietti disponibili, prezzo,...
+films = ["Avatar", 50, 8.50, "Inception", 30, 7.00, "Interstellar", 40, 7.50, "The Matrix", 25, 6.50]
 '''
+
 films = {
     "Avatar": [50, 8.50],
     "Inception": [30, 7.00],
@@ -14,11 +16,11 @@ films = {
 # Funzione per calcolare lo sconto in base al numero di biglietti
 def calculate_discount(num_tickets):
     if num_tickets >= 5:
-        return 0.20  # 20% di sconto per 5 o più biglietti
+        return 0.20  # 20% di sconto per 5 o più biglietti in decimale
     elif num_tickets >= 3:
-        return 0.10  # 10% di sconto per 3-4 biglietti
+        return 0.10  # 10% di sconto per 3-4 biglietti in decimale
     else:
-        return 0.0   # Nessuno sconto
+        return 0.0   # Nessuno sconto, compra di piu', tirchio
 
 # Funzione per gestire la connessione con un singolo client
 def handle_client(conn, addr):
@@ -42,8 +44,8 @@ def handle_client(conn, addr):
     
     # Verifica disponibilità biglietti
     if selected_film in films:
-        available_tickets = films[selected_film][0]
-        ticket_price = films[selected_film][1]
+        available_tickets = films[selected_film][0] # films[selected_film => "Avatar"][0 => 50]
+        ticket_price = films[selected_film][1] 
         
         if num_tickets > available_tickets:
             # Biglietti non disponibili
@@ -58,9 +60,6 @@ def handle_client(conn, addr):
             
             # Prezzo finale
             final_price = total_price - discount_amount
-            
-            # Aggiornamento biglietti disponibili
-            films[selected_film][0] -= num_tickets
             
             # Invio risposta al client
             response = f"OK|{total_price:.2f}|{discount_percentage*100:.0f}|{discount_amount:.2f}|{final_price:.2f}"
@@ -81,7 +80,7 @@ def start_server():
     server_socket.listen(5)
     print("Server biglietteria in ascolto sulla porta 12345...")
     
-    # Loop per accettare connessioni
+    # Loop per accettare connessioni 
     while True:
         conn, addr = server_socket.accept()
         # Creazione thread per gestire il client

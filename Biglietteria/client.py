@@ -83,6 +83,9 @@ def buy_tickets():
         
         messagebox.showinfo("Acquisto completato", message)
         
+        # Svuota la casella di testo
+        entry_tickets.delete(0, tk.END)
+    
         # Chiusura della finestra e della connessione
         client_socket.close()
         root.destroy()
@@ -90,9 +93,7 @@ def buy_tickets():
         # Errore dal server
         error_message = parts[1]
         messagebox.showerror("Errore", error_message)
-    
-    # Svuota la casella di testo
-    entry_tickets.delete(0, tk.END)
+
 
 # Creazione finestra principale
 root = tk.Tk()
